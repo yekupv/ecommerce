@@ -1,14 +1,36 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { observer } from "mobx-react-lite";
 import { Card, Container, Form, Button, Row } from "react-bootstrap";
-import { NavLink, useLocation } from "react-router-dom";
-import { LOGIN_ROUTE, REGISTRATION_ROUTE } from "../utils/consts";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { login, registration } from "../http/userAPI";
+import { LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE } from "../utils/consts";
+import { Context } from "..";
 
-const Auth = () => {
+const Auth = observer(() => {
+	const navigate = useNavigate();
+	const { user } = useContext(Context);
 	const location = useLocation();
 	const isLogin = location.pathname === LOGIN_ROUTE;
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const click = async () => {
+		try {
+			let data;
+			if (isLogin) {
+				data = await login(email, password);
+			} else {
+				data = await registration(email, password);
+			}
+			user.setUser(data);
+			user.setIsAuth(true);
+			navigate(SHOP_ROUTE);
+		} catch (e) {
+			alert(e.response.data.message);
+		}
+	};
 	return (
 		<Container
-			className='d-flex justify-content align-items-center'
+			className='d-flex justify-content-center align-items-center'
 			style={{ height: window.innerHeight - 54 }}
 		>
 			<Card style={{ width: 600 }} className='p-5'>
@@ -19,10 +41,15 @@ const Auth = () => {
 					<Form.Control
 						className='mt-3'
 						placeholder='Email...'
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
 					></Form.Control>
 					<Form.Control
+						type='password'
 						className='mt-3'
 						placeholder='Password...'
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
 					></Form.Control>
 					<div className='d-flex justify-content-between align-items-center flex-row'>
 						{isLogin ? (
@@ -40,6 +67,7 @@ const Auth = () => {
 						<Button
 							className='mt-3 align-self-end'
 							variant={"outline-success"}
+							onClick={click}
 						>
 							{isLogin ? "Sign In" : "Sign Up"}
 						</Button>
@@ -48,6 +76,6 @@ const Auth = () => {
 			</Card>
 		</Container>
 	);
-};
+});
 
 export default Auth;
