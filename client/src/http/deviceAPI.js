@@ -35,6 +35,7 @@ export const fetchDevices = async (typeId, brandId, page, limit = 10) => {
 			limit,
 		},
 	});
+	console.log(data);
 	return data;
 };
 

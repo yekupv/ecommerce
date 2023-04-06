@@ -26,6 +26,7 @@ const DeviceItem = ({ device, brands }) => {
 					height={150}
 					src={process.env.REACT_APP_API_URL + device.img}
 					style={{ objectFit: "contain" }}
+					alt={device.name + " image"}
 				/>
 				<div className='mt-2 d-flex justify-content-between'>
 					<div className='text-black-50'>{device_brand}</div>
