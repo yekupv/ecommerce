@@ -4,7 +4,6 @@
 
 ## 🚀[Deployment](https://ecommerce-makhambet.netlify.app/)
 
-Images are not loading because of how the server stores them, I'll fix it soon.  
 Sometimes the site can take a very long time to load, again because of free hosting, try to come back later.
 
 
